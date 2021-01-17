@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="io.nncdevel.doma-eclipse-config.commands.category"
+            name="Sample Category">
+      </category>
+      <command
+            categoryId="io.nncdevel.doma-eclipse-config.commands.category"
+            name="Sample Command"
+            id="io.nncdevel.doma-eclipse-config.commands.configCommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="io.nncdevel.domaeclipseconfig.handlers.ConfigHandler"
+            commandId="io.nncdevel.doma-eclipse-config.commands.configCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="io.nncdevel.doma-eclipse-config.commands.configCommand"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="io.nncdevel.doma-eclipse-config.toolbars.configToolbar">
+            <command
+                  id="io.nncdevel.doma-eclipse-config.toolbars.configCommand"
+                  commandId="io.nncdevel.doma-eclipse-config.commands.configCommand"
+                  icon="icons/doma.png"
+                  tooltip="設定">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+</plugin>
