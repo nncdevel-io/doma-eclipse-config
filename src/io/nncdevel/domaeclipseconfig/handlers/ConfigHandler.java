@@ -1,11 +1,15 @@
 package io.nncdevel.domaeclipseconfig.handlers;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;import java.util.stream.Collector;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -32,26 +36,25 @@ public class ConfigHandler extends AbstractHandler {
 
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
-		var projects = Arrays.stream(root.getProjects()).filter(it -> isMavenProject(it) && isDomaProject(it))
-				.collect(Collectors.toList());
-		if(projects.isEmpty()) {
+		List<IProject> projects = Arrays.stream(root.getProjects())
+				.filter(it -> isMavenProject(it) && isDomaProject(it)).collect(Collectors.toList());
+		if (projects.isEmpty()) {
 			MessageDialog.openInformation(window.getShell(), "doma-eclipse-config", "Domaプロジェクトが見つかりませんでした。");
 			return null;
 		}
-		
 
-		for (IProject p : projects) {			
+		for (IProject p : projects) {
 			try {
-				var roota = Paths.get(p.getLocationURI());
-				var classfilepath = Files.walk(roota).filter(it -> it.toFile().isFile())
+				Path roota = Paths.get(p.getLocationURI());
+				Optional<Path> classfilepath = Files.walk(roota).filter(it -> it.toFile().isFile())
 						.filter(it -> it.getFileName().endsWith(".classpath")).findFirst();
 
 				if (classfilepath.isPresent()) {
-					var text = Files.readString(classfilepath.get(), StandardCharsets.UTF_8);
-					var replaced = text.replace(
+					List<String> lines = Files.readAllLines(classfilepath.get(), StandardCharsets.UTF_8);
+					lines.forEach(it -> it = it.replace(
 							"<classpathentry excluding=\"**\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">",
-							"<classpathentry including=\"**/*.script|**/*.sql\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">");
-					Files.writeString(classfilepath.get(), replaced, StandardCharsets.UTF_8,
+							"<classpathentry including=\"**/*.script|**/*.sql\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">"));
+					Files.write(classfilepath.get(), lines, StandardCharsets.UTF_8,
 							StandardOpenOption.TRUNCATE_EXISTING);
 				}
 			} catch (Exception e) {
@@ -59,22 +62,27 @@ public class ConfigHandler extends AbstractHandler {
 				// do nothing
 			}
 		}
-		var message = String.join(System.lineSeparator(), projects.stream().map(it -> it.getName()).collect(Collectors.toList()));
-		MessageDialog.openInformation(window.getShell(), "doma-eclipse-config", "Domaプロジェクトのビルドパスを変更しました。" + System.lineSeparator() + message);
+		String message = String.join(System.lineSeparator(),
+				projects.stream().map(it -> it.getName()).collect(Collectors.toList()));
+		MessageDialog.openInformation(window.getShell(), "doma-eclipse-config",
+				"Domaプロジェクトのビルドパスを変更しました。" + System.lineSeparator() + message);
 		return null;
 	}
 
 	private boolean isMavenProject(IProject projectDir) {
-		var files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
+		File[] files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
 		return Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst().isPresent();
 	}
 
 	private boolean isDomaProject(IProject projectDir) {
 		try {
-			var files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
-			var factorypath = Arrays.stream(files).filter(it -> it.getName().equals(".factorypath")).findFirst();
+			File[] files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
+			Optional<File> factorypath = Arrays.stream(files).filter(it -> it.getName().equals(".factorypath"))
+					.findFirst();
 			if (factorypath.isPresent()) {
-				return Files.readString(factorypath.get().toPath()).contains("repository/org/seasar/doma");
+				Optional<String> line = Files.readAllLines(factorypath.get().toPath(), StandardCharsets.UTF_8).stream()
+						.filter(it -> it.contains("repository/org/seasar/doma")).findFirst();
+				return line.isPresent();
 			}
 			return false;
 		} catch (IOException e) {

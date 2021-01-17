@@ -8,7 +8,8 @@ Bundle-Vendor: nncdevel.io
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.13.900"
-Bundle-RequiredExecutionEnvironment: JavaSE-11,
- JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: io.nncdevel.doma.eclipse.config
 Bundle-ActivationPolicy: lazy
+Export-Package: io.nncdevel.domaeclipseconfig,
+ io.nncdevel.domaeclipseconfig.handlers
