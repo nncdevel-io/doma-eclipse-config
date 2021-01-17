@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -28,6 +30,8 @@ import io.nncdevel.domaeclipseconfig.Activator;
 
 public class ConfigHandler extends AbstractHandler {
 
+	private static final String BEFORE = "<classpathentry excluding=\"**\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">";
+	private static final String AFTER = "<classpathentry including=\"**/*.script|**/*.sql\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">";
 	ILog log = Activator.getDefault().getLog();
 
 	@Override
@@ -50,11 +54,13 @@ public class ConfigHandler extends AbstractHandler {
 						.filter(it -> it.getFileName().endsWith(".classpath")).findFirst();
 
 				if (classfilepath.isPresent()) {
+					List<String> replaced = new ArrayList<>();
 					List<String> lines = Files.readAllLines(classfilepath.get(), StandardCharsets.UTF_8);
-					lines.forEach(it -> it = it.replace(
-							"<classpathentry excluding=\"**\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">",
-							"<classpathentry including=\"**/*.script|**/*.sql\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">"));
-					Files.write(classfilepath.get(), lines, StandardCharsets.UTF_8,
+					for (String line : lines) {
+						replaced.add(line.replace(BEFORE, AFTER));
+					}
+					replaced.forEach(System.out::println);
+					Files.write(classfilepath.get(), replaced, StandardCharsets.UTF_8,
 							StandardOpenOption.TRUNCATE_EXISTING);
 				}
 			} catch (Exception e) {
