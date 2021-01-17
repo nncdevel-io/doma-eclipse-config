@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
+import java.util.Arrays;import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -28,12 +28,19 @@ public class ConfigHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 		var projects = Arrays.stream(root.getProjects()).filter(it -> isMavenProject(it) && isDomaProject(it))
 				.collect(Collectors.toList());
+		if(projects.isEmpty()) {
+			MessageDialog.openInformation(window.getShell(), "doma-eclipse-config", "Domaプロジェクトが見つかりませんでした。");
+			return null;
+		}
+		
 
-		for (IProject p : projects) {
+		for (IProject p : projects) {			
 			try {
 				var roota = Paths.get(p.getLocationURI());
 				var classfilepath = Files.walk(roota).filter(it -> it.toFile().isFile())
@@ -52,9 +59,8 @@ public class ConfigHandler extends AbstractHandler {
 				// do nothing
 			}
 		}
-
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		MessageDialog.openInformation(window.getShell(), "doma-eclipse-config", "Domaプロジェクトのビルドパスを変更しました。");
+		var message = String.join(System.lineSeparator(), projects.stream().map(it -> it.getName()).collect(Collectors.toList()));
+		MessageDialog.openInformation(window.getShell(), "doma-eclipse-config", "Domaプロジェクトのビルドパスを変更しました。" + System.lineSeparator() + message);
 		return null;
 	}
 
