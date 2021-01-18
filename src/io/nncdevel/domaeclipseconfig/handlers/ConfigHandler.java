@@ -17,6 +17,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -62,9 +63,9 @@ public class ConfigHandler extends AbstractHandler {
 					Files.write(classfilepath.get(), replaced, StandardCharsets.UTF_8,
 							StandardOpenOption.TRUNCATE_EXISTING);
 				}
+				p.refreshLocal(IResource.PROJECT, null);
 			} catch (Exception e) {
-				// TODO: handle exception
-				// do nothing
+				e.printStackTrace();
 			}
 		}
 		String message = String.join(System.lineSeparator(),
