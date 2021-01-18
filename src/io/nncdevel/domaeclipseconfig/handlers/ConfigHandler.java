@@ -17,7 +17,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -71,7 +70,7 @@ public class ConfigHandler extends AbstractHandler {
 		String message = String.join(System.lineSeparator(),
 				projects.stream().map(it -> it.getName()).collect(Collectors.toList()));
 		MessageDialog.openInformation(window.getShell(), "doma-eclipse-config",
-				"Domaプロジェクトのビルドパスを変更しました。" + System.lineSeparator() + message);
+				"Build Path of Doma2 Project is changed." + System.lineSeparator() + message);
 		return null;
 	}
 
@@ -81,13 +80,14 @@ public class ConfigHandler extends AbstractHandler {
 	}
 
 	private boolean isDomaProject(IProject projectDir) {
+		String containsKey = getKeyInFactoryPathEntry();
 		try {
 			File[] files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
 			Optional<File> factorypath = Arrays.stream(files).filter(it -> it.getName().equals(".factorypath"))
 					.findFirst();
 			if (factorypath.isPresent()) {
 				Optional<String> line = Files.readAllLines(factorypath.get().toPath(), StandardCharsets.UTF_8).stream()
-						.filter(it -> it.contains("repository/org/seasar/doma")).findFirst();
+						.filter(it -> it.contains(containsKey)).findFirst();
 				return line.isPresent();
 			}
 			return false;
@@ -95,4 +95,14 @@ public class ConfigHandler extends AbstractHandler {
 			return false;
 		}
 	}
+
+	private String getKeyInFactoryPathEntry() {
+		String osName = System.getProperty("os.name").toLowerCase();
+		if (osName.startsWith("win")) {
+			return "repository\\org\\seasar\\doma";
+		} else {
+			return "repository/org/seasar/doma";
+		}
+	}
+
 }
