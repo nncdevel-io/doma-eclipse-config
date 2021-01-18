@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: doma-eclipse-config
 Bundle-SymbolicName: io.nncdevel.doma-eclipse-config;singleton:=true
-Bundle-Version: 0.0.1
+Bundle-Version: 0.0.2
 Bundle-Activator: io.nncdevel.domaeclipseconfig.Activator
 Bundle-Vendor: nncdevel.io
 Require-Bundle: org.eclipse.ui,

@@ -6,11 +6,11 @@
          point="org.eclipse.ui.commands">
       <category
             id="io.nncdevel.doma-eclipse-config.commands.category"
-            name="Sample Category">
+            name="DomaEclipseCongfig">
       </category>
       <command
             categoryId="io.nncdevel.doma-eclipse-config.commands.category"
-            name="Sample Command"
+            name="ComaEclipseCongfig"
             id="io.nncdevel.doma-eclipse-config.commands.configCommand">
       </command>
    </extension>
@@ -22,15 +22,6 @@
       </handler>
    </extension>
    <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="io.nncdevel.doma-eclipse-config.commands.configCommand"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+6">
-      </key>
-   </extension>
-   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -40,7 +31,7 @@
                   id="io.nncdevel.doma-eclipse-config.toolbars.configCommand"
                   commandId="io.nncdevel.doma-eclipse-config.commands.configCommand"
                   icon="icons/doma.png"
-                  tooltip="設定">
+                  tooltip="Doma設定">
             </command>
          </toolbar>
       </menuContribution>
