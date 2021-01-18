@@ -70,7 +70,7 @@ public class ConfigHandler extends AbstractHandler {
 		String message = String.join(System.lineSeparator(),
 				projects.stream().map(it -> it.getName()).collect(Collectors.toList()));
 		MessageDialog.openInformation(window.getShell(), "doma-eclipse-config",
-				"Build Path of Doma2 Project is changed." + System.lineSeparator() + message);
+				"Doma2プロジェクトのビルドパスを変更しました。" + System.lineSeparator() + message);
 		return null;
 	}
 
