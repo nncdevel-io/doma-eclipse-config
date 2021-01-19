@@ -34,6 +34,8 @@ public class ConfigHandler extends AbstractHandler {
 	private static final String AFTER = "<classpathentry including=\"**/*.script|**/*.sql\" kind=\"src\" output=\"target/classes\" path=\"src/main/resources\">";
 	ILog log = Activator.getDefault().getLog();
 
+	private static final String POM_DOMA_KEY = "<groupId>org.seasar.doma</groupId>";
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
@@ -80,10 +82,29 @@ public class ConfigHandler extends AbstractHandler {
 		return Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst().isPresent();
 	}
 
-	private boolean isDomaProject(IProject projectDir) {
+	private boolean isDomaProject(IProject project) {
+		return isDomaProjectByPom(project) || isDomaProjectByFactoryPath(project);
+	}
+
+	private boolean isDomaProjectByPom(IProject project) {
+		try {
+			File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
+			Optional<File> pomfile = Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst();
+			if (pomfile.isPresent()) {
+				Optional<String> line = Files.readAllLines(pomfile.get().toPath(), StandardCharsets.UTF_8).stream()
+						.filter(it -> it.contains(POM_DOMA_KEY)).findFirst();
+				return line.isPresent();
+			}
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	private boolean isDomaProjectByFactoryPath(IProject project) {
 		String containsKey = getKeyInFactoryPathEntry();
 		try {
-			File[] files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
+			File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
 			Optional<File> factorypath = Arrays.stream(files).filter(it -> it.getName().equals(".factorypath"))
 					.findFirst();
 			if (factorypath.isPresent()) {
