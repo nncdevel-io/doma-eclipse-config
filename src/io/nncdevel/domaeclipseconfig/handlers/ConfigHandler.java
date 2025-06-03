@@ -77,19 +77,25 @@ public class ConfigHandler extends AbstractHandler {
 		return null;
 	}
 
-	private boolean isMavenProject(IProject projectDir) {
-		File[] files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
-		return Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst().isPresent();
-	}
+        private boolean isMavenProject(IProject projectDir) {
+                File[] files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
+                if (files == null) {
+                        return false;
+                }
+                return Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst().isPresent();
+        }
 
 	private boolean isDomaProject(IProject project) {
 		return isDomaProjectByPom(project) || isDomaProjectByFactoryPath(project);
 	}
 
-	private boolean isDomaProjectByPom(IProject project) {
-		try {
-			File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
-			Optional<File> pomfile = Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst();
+        private boolean isDomaProjectByPom(IProject project) {
+                try {
+                        File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
+                        if (files == null) {
+                                return false;
+                        }
+                        Optional<File> pomfile = Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst();
 			if (pomfile.isPresent()) {
 				Optional<String> line = Files.readAllLines(pomfile.get().toPath(), StandardCharsets.UTF_8).stream()
 						.filter(it -> it.contains(POM_DOMA_KEY)).findFirst();
@@ -103,9 +109,12 @@ public class ConfigHandler extends AbstractHandler {
 
 	private boolean isDomaProjectByFactoryPath(IProject project) {
 		String containsKey = getKeyInFactoryPathEntry();
-		try {
-			File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
-			Optional<File> factorypath = Arrays.stream(files).filter(it -> it.getName().equals(".factorypath"))
+                try {
+                        File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
+                        if (files == null) {
+                                return false;
+                        }
+                        Optional<File> factorypath = Arrays.stream(files).filter(it -> it.getName().equals(".factorypath"))
 					.findFirst();
 			if (factorypath.isPresent()) {
 				Optional<String> line = Files.readAllLines(factorypath.get().toPath(), StandardCharsets.UTF_8).stream()
