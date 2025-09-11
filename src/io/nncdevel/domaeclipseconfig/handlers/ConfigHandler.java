@@ -77,7 +77,7 @@ public class ConfigHandler extends AbstractHandler {
 		return null;
 	}
 
-        private boolean isMavenProject(IProject projectDir) {
+        boolean isMavenProject(IProject projectDir) {
                 File[] files = Paths.get(projectDir.getLocationURI()).toFile().listFiles();
                 if (files == null) {
                         return false;
@@ -85,11 +85,11 @@ public class ConfigHandler extends AbstractHandler {
                 return Arrays.stream(files).filter(it -> it.getName().equals("pom.xml")).findFirst().isPresent();
         }
 
-	private boolean isDomaProject(IProject project) {
+	boolean isDomaProject(IProject project) {
 		return isDomaProjectByPom(project) || isDomaProjectByFactoryPath(project);
 	}
 
-        private boolean isDomaProjectByPom(IProject project) {
+        boolean isDomaProjectByPom(IProject project) {
                 try {
                         File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
                         if (files == null) {
@@ -107,7 +107,7 @@ public class ConfigHandler extends AbstractHandler {
 		}
 	}
 
-	private boolean isDomaProjectByFactoryPath(IProject project) {
+	boolean isDomaProjectByFactoryPath(IProject project) {
 		String containsKey = getKeyInFactoryPathEntry();
                 try {
                         File[] files = Paths.get(project.getLocationURI()).toFile().listFiles();
@@ -127,7 +127,7 @@ public class ConfigHandler extends AbstractHandler {
 		}
 	}
 
-	private String getKeyInFactoryPathEntry() {
+	String getKeyInFactoryPathEntry() {
 		String osName = System.getProperty("os.name").toLowerCase();
 		if (osName.startsWith("win")) {
 			return "repository\\org\\seasar\\doma";
