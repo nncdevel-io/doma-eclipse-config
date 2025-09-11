@@ -1,0 +1,13 @@
+/* データベース初期化スクリプト */
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+INSERT INTO users (name, email) VALUES
+    ('田中太郎', 'tanaka@example.com'),
+    ('佐藤花子', 'sato@example.com'),
+    ('山田次郎', 'yamada@example.com');

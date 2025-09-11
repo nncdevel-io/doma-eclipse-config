@@ -20,3 +20,22 @@ Eclipse の PDE(Plug-in Development Environment) を利用して以下の手順�
 プラグインを導入すると、Eclipse のメインツールバーに Doma アイコン ![](icons/doma.png) が表示されます。  
 このアイコンをクリックすると、ワークスペース内の Maven Doma プロジェクトを検索して `.classpath` を自動で更新します。  
 処理が完了すると、変更されたプロジェクト名がダイアログに表示されます。
+
+## テストとサンプルコード
+
+品質向上のため、単体テストとサンプルコードを追加しました：
+
+### テスト実行
+```bash
+# Eclipse内でJUnitテストを実行
+右クリック → "Run As" → "JUnit Test"
+
+# 軽量テストの実行（Eclipse依存なし）
+ConfigHandlerSimpleTest.java を実行
+```
+
+### サンプルプロジェクト
+`examples/doma-sample-project/` にDoma2を使用した完全なサンプルプロジェクトがあります。
+このプロジェクトでプラグインの動作確認ができます。
+
+詳細な情報は [TESTING.md](TESTING.md) を参照してください。
