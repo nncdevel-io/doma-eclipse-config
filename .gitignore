@@ -23,5 +23,13 @@
 hs_err_pid*
 /bin/
 
+# Build artifacts and tools (temporary for CI)
+tools/
+test/lib/
+
+# Temporary files
+*.tmp
+*.temp
+
 # Ignore validation script (temporary)
 validate_project.sh
