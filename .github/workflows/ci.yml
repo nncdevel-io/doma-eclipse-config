@@ -27,10 +27,10 @@ jobs:
     
     - name: Compile and run simple tests
       run: |
-        # Compile the simple test that doesn't require Eclipse
-        javac -cp "src:test/lib/junit-4.13.2.jar:test/lib/hamcrest-core-1.3.jar" test/io/nncdevel/domaeclipseconfig/handlers/ConfigHandlerSimpleTest.java
+        # Compile the utility class and test that don't require Eclipse
+        javac -cp "src:test/lib/junit-4.13.2.jar:test/lib/hamcrest-core-1.3.jar" src/io/nncdevel/domaeclipseconfig/handlers/DomaConfigUtils.java test/io/nncdevel/domaeclipseconfig/handlers/DomaConfigUtilsTest.java
         # Run the test
-        java -cp "src:test:test/lib/junit-4.13.2.jar:test/lib/hamcrest-core-1.3.jar" org.junit.runner.JUnitCore io.nncdevel.domaeclipseconfig.handlers.ConfigHandlerSimpleTest
+        java -cp "src:test:test/lib/junit-4.13.2.jar:test/lib/hamcrest-core-1.3.jar" org.junit.runner.JUnitCore io.nncdevel.domaeclipseconfig.handlers.DomaConfigUtilsTest
 
   static-analysis:
     runs-on: ubuntu-latest

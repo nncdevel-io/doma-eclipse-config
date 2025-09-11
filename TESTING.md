@@ -42,9 +42,11 @@ Doma2を使用した典型的なJavaプロジェクトのサンプルです。�
 - OS固有のパス生成テスト
 - クラスパス修正ロジックのテスト
 
-#### ConfigHandlerSimpleTest.java
-Eclipse依存関係なしの軽量テスト:
+#### DomaConfigUtilsTest.java
+Eclipse依存関係なしの軽量テスト（CI環境で実行可能）:
 - OS固有のパス生成テスト
+- Doma依存関係検出のテスト
+- .factorypath検出のテスト
 - 文字列置換ロジックのテスト
 - クラスパスファイル処理のテスト
 
