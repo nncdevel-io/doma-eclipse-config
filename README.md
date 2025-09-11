@@ -3,6 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-0.0.3-blue.svg)]()
 
+> **English**: For English documentation, see [README_EN.md](README_EN.md) | **日本語**: 日本語の詳細ドキュメントは以下をご覧ください
+
 Doma2プロジェクト用のEclipse IDEプラグインです。MavenベースのDoma2プロジェクトのクラスパス設定を自動化し、SQLファイルとスクリプトファイルがEclipse内で正しく認識されるようにビルドパスを調整します。
 
 ## 概要
@@ -414,7 +416,14 @@ DomaConfigUtilsTest.java を実行
 `examples/doma-sample-project/` にDoma2を使用した完全なサンプルプロジェクトがあります。
 このプロジェクトでプラグインの動作確認ができます。
 
-詳細な情報は [TESTING.md](TESTING.md) を参照してください。
+**詳細な情報は [TESTING.md](TESTING.md) を参照してください。**
+
+### テストの実行方法
+- **JUnit単体テスト**: Eclipse内で右クリック → "Run As" → "JUnit Test" 
+- **手動動作確認**: サンプルプロジェクトを使用
+- **継続的品質向上**: テストカバレッジとリファクタリングガイドライン
+
+> **完全なテスト手順、サンプルプロジェクトの詳細、品質向上ガイドラインについては [TESTING.md](TESTING.md) をご覧ください。**
 
 ## コード品質とCI
 
@@ -436,6 +445,8 @@ DomaConfigUtilsTest.java を実行
 - メソッドの可視性とJavadocの改善
 
 ## コントリビューション（貢献）
+
+> **English**: For English contribution guide, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 このプロジェクトへの貢献を歓迎します！以下のガイドラインに従ってご参加ください。
 
