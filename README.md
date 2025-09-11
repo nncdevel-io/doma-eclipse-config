@@ -31,7 +31,7 @@ Eclipse の PDE(Plug-in Development Environment) を利用して以下の手順�
 右クリック → "Run As" → "JUnit Test"
 
 # 軽量テストの実行（Eclipse依存なし）
-ConfigHandlerSimpleTest.java を実行
+DomaConfigUtilsTest.java を実行
 ```
 
 ### サンプルプロジェクト
@@ -39,3 +39,22 @@ ConfigHandlerSimpleTest.java を実行
 このプロジェクトでプラグインの動作確認ができます。
 
 詳細な情報は [TESTING.md](TESTING.md) を参照してください。
+
+## コード品質とCI
+
+このプロジェクトは以下の品質向上施策を導入しています：
+
+### 継続的インテグレーション
+- GitHub Actions による自動ビルドとテスト
+- Eclipse依存のない軽量テストの自動実行
+- 静的解析ツールによるコード品質チェック
+
+### 静的解析ツール
+- **Checkstyle**: コーディング規約の自動チェック
+- **PMD**: コード品質とベストプラクティスの検証
+- 設定ファイル: `.github/checkstyle-config.xml`, `.github/pmd-ruleset.xml`
+
+### コードリファクタリング
+- 重複コードの削除とユーティリティクラスの抽出
+- 例外処理の改善とログ出力の統一
+- メソッドの可視性とJavadocの改善
